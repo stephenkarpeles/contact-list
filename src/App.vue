@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ContactCard from './components/ContactCard.vue'
+import ContactList from './components/ContactList.vue'
 </script>
 
 <template>
@@ -13,7 +13,7 @@ import ContactCard from './components/ContactCard.vue'
     <section>
       <div class="container">
         <div class="contact-wrapper">
-          <ContactCard />
+          <ContactList/>
         </div>
       </div>
     </section>
