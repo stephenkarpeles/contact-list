@@ -4,7 +4,7 @@
 <template>
   <header class="header">
     <div class="container">
-      Header
+      Contact List App
     </div>
   </header>
 
