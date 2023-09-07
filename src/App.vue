@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ContactCard from './components/ContactCard.vue'
 </script>
 
 <template>
@@ -6,15 +7,16 @@
     <div class="container">
       Contact List App
     </div>
-  </header>
+  </header>  
 
   <main>
     <section>
       <div class="container">
-        Main section
+        <ContactCard />
       </div>
     </section>
   </main>
+  
 </template>
 
 <style scoped>
