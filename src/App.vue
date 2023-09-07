@@ -12,13 +12,23 @@ import ContactCard from './components/ContactCard.vue'
   <main>
     <section>
       <div class="container">
-        <ContactCard />
+        <div class="contact-wrapper">
+          <ContactCard />
+        </div>
       </div>
     </section>
   </main>
   
 </template>
 
-<style scoped>
+<style lang="scss">
+  @import './assets/variables.scss';
 
+  main {
+    background-color: $color-aqua;
+    min-height: 100vh;
+  }
+  .contact-wrapper {
+    width: 50%;
+  }
 </style>
