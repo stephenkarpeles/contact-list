@@ -1,4 +1,4 @@
-## Project Setup
+## Contact List - Project Setup
 
 ```sh
 npm install
