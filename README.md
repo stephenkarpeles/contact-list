@@ -3,7 +3,7 @@
 ### To Spin Up The App:
 
 ```sh
-git clone this repo
+git clone git@github.com:stephenkarpeles/contact-list.git
 ```
 
 ```sh
