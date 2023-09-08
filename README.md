@@ -7,6 +7,10 @@ git clone git@github.com:stephenkarpeles/contact-list.git
 ```
 
 ```sh
+cd contact-list
+```
+
+```sh
 npm install
 ```
 
