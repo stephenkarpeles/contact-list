@@ -23,7 +23,6 @@ const contacts = ref<ContactType[]>([]);
 const displayForm = ref(false);
 
 const selectContact = (contact: ContactType) => {
-  console.log("Contact selected: ", contact);
   selectedContact.value = contact;
 };
 
@@ -59,6 +58,10 @@ const toggleFormDisplay = () => {
     <div v-if="displayForm">
       <ContactForm />
     </div>
+
+    <div v-if="contacts.length === 0 && !displayForm" class="no-contacts-text">
+      Click the button above to create your first contact!
+    </div>
     
     <div class="contact-list">
       <ContactCard 
@@ -76,7 +79,7 @@ const toggleFormDisplay = () => {
     </div>
   </div>
   <div>
-    <ContactDetails :contact="selectedContact" />
+    <ContactDetails :contact="selectedContact" :contacts="contacts" />
   </div>
 </template>
 
@@ -127,5 +130,12 @@ const toggleFormDisplay = () => {
     > * {
       width: calc(50% - 20px);
     }
+  }
+
+  .no-contacts-text {
+    color: $color-white;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.2;
   }
 </style>

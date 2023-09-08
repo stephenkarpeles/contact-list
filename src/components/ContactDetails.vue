@@ -1,7 +1,46 @@
 <script setup lang="ts">
  import { db } from '../firebase'; 
- import { getFirestore, collection, getDocs, doc, deleteDoc } from 'firebase/firestore';
+ import { getFirestore, collection, getDocs, doc, deleteDoc, updateDoc } from 'firebase/firestore';
+ import { ref } from 'vue';
+ import type { Ref } from 'vue';
+
+
+    let editableContact: Ref<Contact> = ref({
+    id: '',
+    firstName: '',
+    lastName: '',
+    phoneNumbers: [],
+    photo: '',
+    primaryPhoneIndex: 0,
+    salutation: '',
+    companyName: '',
+    });
+    
+ let isEditing = ref(false);
+
  const emit = defineEmits();
+
+ type ContactType = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  phoneNumbers: Array<{ number: string; primary: boolean; type: string }>;
+  photo: string;
+  primaryPhoneIndex: number;
+  salutation: string;
+  companyName: string;
+};
+
+ interface Contact {
+  id: string;
+  firstName: string;
+  lastName: string;
+  phoneNumbers: Array<{ number: string; primary: boolean; type: string }>;
+  photo: string;
+  primaryPhoneIndex: number;
+  salutation: string;
+  companyName: string;
+}
 
   const { contact } = defineProps<{
     contact: {
@@ -14,6 +53,7 @@
       salutation: string;
       companyName: string;
     } | null;
+    contacts: ContactType[];
   }>();
 
   const getPhoneNumberColor = (type: string) => {
@@ -23,22 +63,52 @@
     return '';
   }
 
-  async function deleteContact(contactId: string) {
-  console.log('Contact ID:', contactId);
+  const toggleEdit = () => {
+    isEditing.value = !isEditing.value;
+
+    if (contact) {
+        editableContact.value = { ...contact };
+    }
+};
+
+const cancelEdit = () => {
+    if (contact) {
+        editableContact.value = { ...contact };
+    }
+    isEditing.value = false;
+};
+
+async function updateContact() {
+  if (!editableContact.value || !editableContact.value.id) {
+    console.error('Cannot update a null contact');
+    return;
+  }
+
   try {
-      const contactDoc = doc(db, 'contacts', contactId);
-      await deleteDoc(contactDoc);
-      console.log('Document deleted');
-      window.location.reload();  
-  } catch (e) {
-      console.error('Error deleting document', e);
+    const contactId = editableContact.value.id;
+    const contactRef = doc(db, 'contacts', contactId);
+    await updateDoc(contactRef, { ...editableContact.value });
+    console.log('Contact updated successfully');
+    isEditing.value = false;
+  } catch (error) {
+    console.error('Error updating contact', error);
   }
 }
+
+  async function deleteContact(contactId: string) {
+    try {
+        const contactDoc = doc(db, 'contacts', contactId);
+        await deleteDoc(contactDoc);
+        window.location.reload();  
+    } catch (e) {
+        console.error('Error deleting document', e);
+    }
+    }
 
 </script>
 
 <template>
-    <div class="contact-details-wrapper">
+    <div class="contact-details-wrapper" v-if="contacts.length > 0">
         <div v-if="contact" class="contact-details">
             <h2>Contact Details</h2>
             <div>
@@ -51,6 +121,17 @@
             </ul>
             <div>
                 <strong>Company Name:</strong> {{ contact?.companyName }}
+            </div>
+            <div class="edit-btn-wrapper">
+                <button v-if="!isEditing" class="edit-btn" @click="toggleEdit">Edit Contact</button>
+                <button v-if="isEditing" class="save-btn" @click="updateContact">Save</button>
+                <button v-if="isEditing" class="cancel-btn" @click="cancelEdit">Cancel</button>
+            </div>
+            <div class="edit-inputs-block" v-if="isEditing">
+                <input v-model="editableContact.firstName" placeholder="First Name" />
+                <input v-model="editableContact.lastName" placeholder="Last Name" />
+                <input v-model="editableContact.companyName" placeholder="Company Name" />
+                <input v-model="editableContact.salutation" placeholder="Salutation" />
             </div>
             <div class="delete-btn-wrapper">
                 <button class="delete-btn" @click="deleteContact(contact.id)">Delete Contact</button>
@@ -144,5 +225,16 @@
         border-top: 1px solid $color-mid-gray;
     }
 
+    .edit-inputs-block {
+        input {
+            width: 100%;
+            padding: 6px 12px;
+            border-radius: $border-radius-sm;
+            font-family: $font-sans-serif;
+            border: 1px solid $color-light-gray;
+            display: block;
+            margin-bottom: 4px;
+        }
+    }
 
 </style>

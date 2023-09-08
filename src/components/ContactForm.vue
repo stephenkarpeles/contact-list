@@ -140,7 +140,6 @@
         form.value.lastName &&
         form.value.phoneNumbers.every(phone => phone.number)
     ) {
-        console.log(form.value);
 
         try {
             await setDoc(doc(db, "contacts", new Date().toISOString()), form.value);
