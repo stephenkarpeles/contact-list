@@ -1,6 +1,10 @@
 ## Contact List 
 
-#### To Spin Up The App
+### To Spin Up The App:
+
+```sh
+git clone this repo
+```
 
 ```sh
 npm install
