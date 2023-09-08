@@ -1,14 +1,40 @@
 <script setup lang="ts">
+  const emit = defineEmits();
+
+  const handleClick = () => {
+    emit('click');
+  };
+
+  const defaultPhoto = '/placeholder.jpg';
+
+  const { firstName, lastName, phoneNumbers, photo, companyName, primaryPhoneIndex = 0, salutation } = defineProps<{
+    firstName: string;
+    lastName: string;
+    phoneNumbers: Array<{ number: string, primary: boolean, type: string }>;
+    photo: string;
+    primaryPhoneIndex: number;
+    salutation: string;
+    companyName: string;
+  }>();
+
+  const getPrimaryPhoneNumber = () => {
+    if (phoneNumbers && phoneNumbers[primaryPhoneIndex ?? 0]) {
+      return phoneNumbers[primaryPhoneIndex ?? 0].number;
+    }
+    return 'Phone number not available';
+  };
 </script>
 
 <template>
-  <div class="contact-card">
+  <div class="contact-card" @click="handleClick">
     <div class="contact-card__image">
-      <img src="https://media.istockphoto.com/id/1171169127/photo/headshot-of-cheerful-handsome-man-with-trendy-haircut-and-eyeglasses-isolated-on-gray.jpg?s=612x612&w=0&k=20&c=yqAKmCqnpP_T8M8I5VTKxecri1xutkXH7zfybnwVWPQ=" alt="">
+      <img :src="defaultPhoto" :alt="`${firstName} ${lastName}`" />
     </div>
     <div class="contact-card__content">
-      <div class="contact-card__name">First Last</div>
-      <div class="contact-card__phone">888.999.0988</div>
+      <div class="contact-card__name">{{ salutation }} {{ firstName }} {{ lastName }}</div>
+      <div class="contact-card__phone">
+        {{ getPrimaryPhoneNumber() }}
+      </div>
     </div>
   </div>
 </template>
@@ -22,6 +48,12 @@
     box-shadow: $box-shadow-2;
     background-color: $color-white;
     cursor: pointer;
+    transition: .2s ease all;
+
+    &:hover {
+      opacity: .8;
+      transition: .2s ease all;
+    }
 
     &__content {
       padding: .75rem 1rem;

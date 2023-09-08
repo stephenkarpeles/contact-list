@@ -5,7 +5,7 @@ import ContactList from './components/ContactList.vue'
 <template>
   <header class="header">
     <div class="container">
-      Contact List App
+      Ye Olde Contact List App
     </div>
   </header>  
 
@@ -27,8 +27,5 @@ import ContactList from './components/ContactList.vue'
   main {
     background-color: $color-aqua;
     min-height: 100vh;
-  }
-  .contact-wrapper {
-    width: 50%;
   }
 </style>
