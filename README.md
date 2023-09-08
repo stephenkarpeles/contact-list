@@ -1,4 +1,6 @@
-## Contact List - To Spin Up The App:
+## Contact List 
+
+#### To Spin Up The App
 
 ```sh
 npm install
